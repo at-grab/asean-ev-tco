@@ -361,6 +361,101 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="factors" id="mktBarriers" style="margin-bottom:0"></div>
   </div>
 
+  <!-- ========== EV FINANCING BARRIERS (LENDER VIEW) ========== -->
+  <h2 class="section-title" style="color:#a78bfa;border-color:#a78bfa44">EV Financing Barriers — Lender's View — <span id="finCountryLabel"></span></h2>
+  <p style="color:var(--muted);font-size:.8rem;margin-bottom:1rem">What blocks a bank or finance company from lending to ride-hail drivers for EV purchases? This section models barriers from the lender's perspective — and what Grab can offer to de-risk. Designed as a pitch tool for Grab BD &amp; country teams.</p>
+
+  <div class="controls">
+    <div class="control-group">
+      <h3>Loan Parameters</h3>
+      <label>Vehicle segment</label>
+      <select id="finSeg">
+        <option value="compact">Compact Car (GrabCar)</option>
+        <option value="mpv">MPV (Grab Premium)</option>
+        <option value="mpv_premium">Premium MPV (GrabExec)</option>
+        <option value="motorbike_commuter">Motorbike — Commuter</option>
+        <option value="motorbike_premium">Motorbike — Premium</option>
+      </select>
+      <div class="control-row" style="margin-top:.4rem"><label>Loan tenure (months)</label><span class="value" id="finTenureVal">60</span></div>
+      <input type="range" id="finTenure" min="24" max="84" step="6" value="60">
+      <div class="control-row"><label>Down payment %</label><span class="value" id="finDownVal">20%</span></div>
+      <input type="range" id="finDown" min="0" max="50" step="5" value="20">
+      <div class="control-row"><label>Bank auto loan rate</label><span class="value" id="finRateVal">—</span></div>
+      <input type="range" id="finRate" min="2" max="20" step="0.5" value="6">
+    </div>
+    <div class="control-group">
+      <h3>Driver Economics</h3>
+      <div class="control-row"><label>Working hours/day</label><span class="value" id="finHrsVal">10</span></div>
+      <input type="range" id="finHrs" min="6" max="14" step="1" value="10">
+      <div class="control-row"><label>Working days/month</label><span class="value" id="finWkDaysVal">25</span></div>
+      <input type="range" id="finWkDays" min="15" max="30" step="1" value="25">
+      <div class="control-row"><label>Bank max DTI threshold</label><span class="value" id="finDtiMaxVal">35%</span></div>
+      <input type="range" id="finDtiMax" min="20" max="50" step="5" value="35">
+    </div>
+  </div>
+
+  <!-- Loan affordability -->
+  <div class="downtime-box" style="border-color:#a78bfa66">
+    <h4 style="color:#a78bfa">Loan Affordability Check</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+      <div>
+        <div class="row"><span class="lbl">EV price</span><span class="val" id="finEvPrice">—</span></div>
+        <div class="row"><span class="lbl">Down payment</span><span class="val" id="finDownAmt">—</span></div>
+        <div class="row"><span class="lbl">Loan principal</span><span class="val" style="font-weight:600" id="finPrincipal">—</span></div>
+        <div class="row"><span class="lbl">Monthly EV payment</span><span class="val" style="font-weight:700;font-size:1rem" id="finEvPmt">—</span></div>
+        <div style="padding:0 0 .3rem;font-size:.62rem;color:#64748b" id="finEvPmtMath"></div>
+        <div class="row"><span class="lbl">Monthly ICE payment (compare)</span><span class="val" id="finIcePmt">—</span></div>
+        <div class="row"><span class="lbl">EV vs ICE monthly diff</span><span class="val" id="finDiff">—</span></div>
+      </div>
+      <div>
+        <div class="row"><span class="lbl">Driver monthly gross income</span><span class="val" style="font-weight:700;font-size:1rem" id="finIncome">—</span></div>
+        <div style="padding:0 0 .3rem;font-size:.62rem;color:#64748b" id="finIncomeMath"></div>
+        <div class="row"><span class="lbl">Monthly fuel/energy savings (EV)</span><span class="val ev-color" id="finFuelSave">—</span></div>
+        <div class="row"><span class="lbl">Effective net payment (after fuel savings)</span><span class="val" style="font-weight:600" id="finNetPmt">—</span></div>
+        <div class="row"><span class="lbl" style="font-weight:700">DTI ratio (EV loan)</span><span class="val" style="font-weight:700;font-size:1.1rem" id="finDti">—</span></div>
+        <div class="row"><span class="lbl">DTI ratio (ICE loan)</span><span class="val" id="finIceDti">—</span></div>
+        <div class="row"><span class="lbl">Bank DTI threshold</span><span class="val" id="finDtiThresh">—</span></div>
+      </div>
+    </div>
+    <div style="margin-top:.5rem;padding-top:.4rem;border-top:1px solid var(--border)">
+      <div class="row"><span class="lbl" style="font-weight:700;font-size:.9rem">Affordability Verdict</span><span class="val" style="font-size:1rem;font-weight:700" id="finAffordVerdict">—</span></div>
+    </div>
+  </div>
+
+  <!-- Lender risk scorecard -->
+  <div class="downtime-box" style="border-color:#ef444466">
+    <h4 style="color:#ef4444">Lender Risk Scorecard — 6 Barrier Dimensions</h4>
+    <p style="font-size:.7rem;color:var(--muted);margin-bottom:.5rem">Scored 1-5 from the lender's perspective. 1 = dealbreaker, 5 = no concern. Scores of 1-2 (red) are likely loan-rejection triggers.</p>
+    <div id="finScorecard" class="factors" style="margin-bottom:.5rem"></div>
+    <div style="padding-top:.4rem;border-top:1px solid var(--border)">
+      <div class="row"><span class="lbl" style="font-weight:700;font-size:.95rem">Overall Financing Readiness</span><span class="val" style="font-size:1.2rem;font-weight:700" id="finOverall">—</span></div>
+      <div class="row"><span class="lbl">Verdict</span><span class="val" style="font-weight:600" id="finVerdict">—</span></div>
+    </div>
+  </div>
+
+  <!-- Grab de-risking toolkit -->
+  <div class="downtime-box" style="border-color:#10b98166">
+    <h4 style="color:#10b981">Grab De-risking Toolkit — What Grab Brings to the Table</h4>
+    <p style="font-size:.7rem;color:var(--muted);margin-bottom:.5rem">Grab cannot provide buyback guarantees, residual value backstops, or first-loss guarantees. But Grab CAN offer these to significantly reduce lender risk:</p>
+    <div id="finGrabToolkit" class="factors" style="margin-bottom:.5rem"></div>
+    <div style="padding-top:.4rem;border-top:1px solid var(--border)">
+      <div class="row"><span class="lbl" style="font-weight:700">Readiness After Grab Support</span><span class="val" style="font-size:1.1rem;font-weight:700" id="finAfterGrab">—</span></div>
+    </div>
+  </div>
+
+  <!-- Cross-city comparison -->
+  <div class="table-section">
+    <h3>Cross-City Financing Readiness — All Markets</h3>
+    <p style="font-size:.7rem;color:var(--muted);margin-bottom:.5rem">Which cities should Grab BD teams prioritize for finance company partnerships?</p>
+    <div id="finCityTable"></div>
+  </div>
+
+  <!-- Pitch summary -->
+  <div class="downtime-box" style="border-color:#38bdf866;margin-bottom:1rem">
+    <h4 style="color:#38bdf8">BD Pitch Summary — Copy & Share</h4>
+    <pre id="finPitchSummary" style="font-size:.72rem;color:var(--text);white-space:pre-wrap;line-height:1.6;background:var(--surface2);padding:.8rem;border-radius:6px;margin:0;font-family:inherit"></pre>
+  </div>
+
   <h2 class="section-title">Key Factors</h2>
   <div class="factors" id="factorsContainer"></div>
 </div>
@@ -700,11 +795,20 @@ function selC(c){
   });
   if(!hasBikes&&segEl.value.startsWith('motorbike'))segEl.value='compact';
   if(!hasPremMpv&&segEl.value==='mpv_premium')segEl.value='mpv';
-  // Also hide/show in marketplace selector
-  const mktSel=$('mktSeg');
-  [...mktSel.options].forEach(o=>{if(o.value==='mpv_premium')o.style.display=hasPremMpv?'':'none';});
-  if(!hasPremMpv&&mktSel.value==='mpv_premium')mktSel.value='mpv';
+  // Also hide/show in marketplace & financing selectors
+  const mktSel=$('mktSeg'),finSel=$('finSeg');
+  [mktSel,finSel].forEach(sel=>{
+    [...sel.options].forEach(o=>{
+      if(o.value==='mpv_premium')o.style.display=hasPremMpv?'':'none';
+      if(o.value.startsWith('motorbike'))o.style.display=hasBikes?'':'none';
+    });
+    if(!hasPremMpv&&sel.value==='mpv_premium')sel.value='mpv';
+    if(!hasBikes&&sel.value.startsWith('motorbike'))sel.value='compact';
+  });
+  // Set financing rate from country data
+  $('finRate').value=cc.int;$('finRateVal').textContent=cc.int+'%';
   updDisp();render();
+  if(typeof renderFin==='function')renderFin();
 }
 
 const sliders=[
@@ -1328,8 +1432,313 @@ function wireMkt(){
   const origRender=render;
 }
 
+// ========== FINANCING BARRIERS ==========
+const FIN={
+  thailand:{cr:3,crN:'BOT digital lending pilots; gig scoring emerging via LINE BK, SCB',
+    reg:4,regN:'EV3.5 stable to 2027; BOI incentives; 0% excise on CKD EVs',
+    disp:3,dispN:'BYD/MG dealer trade-in programs starting; auction channels thin but growing',
+    repoN:'GPS tracking standard; vehicle registration transferable; medium repo difficulty'},
+  vietnam:{cr:2,crN:'Many drivers unbanked; SBV tightening consumer lending; VinFast offers own financing',
+    reg:4,regN:'0% registration tax to 2027; strong government EV push',
+    disp:2,dispN:'VinFast CPO exists; very limited for other brands; battery lease complicates resale',
+    repoN:'Medium-high repo risk; informal registration in rural areas'},
+  indonesia:{cr:2,crN:'Large unbanked population; OJK multifinance regulations; Gojek/Grab driver data could help',
+    reg:3,regN:'IDR 70M subsidy; local content rules tightening; policy continuity post-election unclear',
+    disp:2,dispN:'Very thin used EV market; Wuling/BYD dealer buyback limited',
+    repoN:'High repo risk in Tier 2/3; STNK transfer complexities'},
+  malaysia:{cr:3,crN:'CTOS credit scoring; Bank Negara hire-purchase guidelines clear',
+    reg:3,regN:'100% EV duty exemption to 2027; but RON 95 subsidy makes ICE artificially cheap',
+    disp:1,dispN:'Only 4% EV share — essentially no secondary market; banks cannot price residual',
+    repoN:'Medium; JPJ registration system; but very low EV resale demand'},
+  singapore:{cr:5,crN:'CBS credit bureau; MAS regulated; excellent banking infrastructure',
+    reg:5,regN:'EEAI rebates; MAS green finance taxonomy; EV road tax favorable',
+    disp:4,dispN:'40% EV share; active used car market; SgCarMart/Carro handle EVs',
+    repoN:'Low; LTA deregistration system; strong enforcement'},
+  philippines:{cr:2,crN:'Many unbanked; BSP exploring inclusive finance; credit scoring nascent',
+    reg:2,regN:'EVIDA passed but no direct subsidies; implementation slow; expensive electricity',
+    disp:1,dispN:'1.5% EV share; zero secondary market; no independent EV valuation',
+    repoN:'High; LTO registration issues; repo logistics challenging outside NCR'},
+  cambodia:{cr:1,crN:'Very informal economy; limited credit infrastructure; MFI-dominated lending',
+    reg:1,regN:'No EV framework; standard import duties; no policy roadmap',
+    disp:1,dispN:'<1% EV share; no disposal channels whatsoever',
+    repoN:'Very high; weak enforcement; cross-border leakage risk'},
+  myanmar:{cr:1,crN:'Banking system under stress; political instability; limited lending',
+    reg:1,regN:'No EV policy; unstable regulatory environment; currency volatility',
+    disp:1,dispN:'<0.5% EV share; no market; no valuation framework',
+    repoN:'Extreme; conflict zones; enforcement impossible in many areas'},
+  taiwan:{cr:4,crN:'JCIC credit bureau; established auto lending; competitive rates',
+    reg:4,regN:'Commodity tax exemption to 2030; strong green finance push',
+    disp:3,dispN:'9% EV share; Tesla CPO active; Gogoro has own resale for 2W',
+    repoN:'Low; MVD registration; strong rule of law'},
+};
+
+const finSliders=[
+  {id:'finTenure',d:'finTenureVal',f:v=>v+' mo'},
+  {id:'finDown',d:'finDownVal',f:v=>v+'%'},
+  {id:'finRate',d:'finRateVal',f:v=>v+'%'},
+  {id:'finHrs',d:'finHrsVal',f:v=>v},
+  {id:'finWkDays',d:'finWkDaysVal',f:v=>v},
+  {id:'finDtiMax',d:'finDtiMaxVal',f:v=>v+'%'},
+];
+
+function pmt(principal,annualRate,months){
+  const r=annualRate/12;
+  if(r===0)return principal/months;
+  return principal*r*Math.pow(1+r,months)/(Math.pow(1+r,months)-1);
+}
+
+function scoreColor(s){return s>=4?'#10b981':s>=3?'#f59e0b':'#ef4444';}
+function scoreDot(s){return s>=4?'🟢':s>=3?'🟡':'🔴';}
+function scoreBar(s){const pct=s/5*100;return `<div style="height:4px;background:var(--surface2);border-radius:2px;margin-top:3px"><div style="width:${pct}%;height:100%;background:${scoreColor(s)};border-radius:2px"></div></div>`;}
+
+function renderFin(){
+  const cc=C[curC],city=cc.cities.find(c=>c.id===$('city').value)||cc.cities[0];
+  const seg=$('finSeg').value,vData=cc.v[seg];
+  if(!vData)return;
+  const isBike=seg.startsWith('motorbike');
+  const ev=vData.ev,ice=vData.ice;
+  const fin=FIN[curC];
+  const tenure=+$('finTenure').value,down=+$('finDown').value/100;
+  const rate=+$('finRate').value/100,hrs=+$('finHrs').value,wkDays=+$('finWkDays').value;
+  const dtiMax=+$('finDtiMax').value/100;
+
+  $('finCountryLabel').textContent=cc.flag+' '+cc.name+' — '+city.name;
+
+  // Loan math
+  const evPrincipal=ev.price*(1-down);
+  const icePrincipal=ice.price*(1-down);
+  const evMonthly=pmt(evPrincipal,rate,tenure);
+  const iceMonthly=pmt(icePrincipal,rate,tenure);
+  const monthlyIncome=cc.hourly*hrs*wkDays;
+
+  // Fuel savings per month
+  const annualKm=isBike?15000:36000;// fleet km/yr
+  const fleetElec=cc.eH*0.2+cc.eP*0.8;
+  const evFuelMo=(annualKm/ev.eff)*fleetElec/12;
+  const iceFuelMo=(annualKm/ice.kpl)*cc.gas/12;
+  const fuelSaveMo=iceFuelMo-evFuelMo;
+  const netEvPmt=evMonthly-fuelSaveMo;
+
+  const evDti=evMonthly/monthlyIncome;
+  const iceDti=iceMonthly/monthlyIncome;
+  const netDti=netEvPmt/monthlyIncome;
+
+  // Render affordability
+  $('finEvPrice').textContent=fmt$(ev.price)+' ('+ev.name+')';
+  $('finDownAmt').textContent=fmt$(ev.price*down)+' ('+Math.round(down*100)+'%)';
+  $('finPrincipal').textContent=fmt$(evPrincipal);
+  $('finEvPmt').textContent=fmt$(evMonthly)+'/mo';
+  $('finEvPmt').style.color=evDti>dtiMax?'#ef4444':'#10b981';
+  $('finEvPmtMath').textContent=fmt$(evPrincipal)+' at '+($('finRate').value)+'% over '+tenure+'mo = '+fmt$(evMonthly)+'/mo';
+  $('finIcePmt').textContent=fmt$(iceMonthly)+'/mo ('+ice.name+')';
+  const diff=evMonthly-iceMonthly;
+  $('finDiff').textContent=(diff>=0?'+':'')+fmt$(diff)+'/mo';
+  $('finDiff').style.color=diff>0?'#ef4444':'#10b981';
+
+  $('finIncome').textContent=fmt$(monthlyIncome)+'/mo';
+  $('finIncome').style.color=monthlyIncome>evMonthly?'#10b981':'#ef4444';
+  $('finIncomeMath').textContent='$'+cc.hourly.toFixed(1)+'/hr × '+hrs+'hrs × '+wkDays+'days = '+fmt$(monthlyIncome)+'/mo';
+  $('finFuelSave').textContent='+'+fmt$(fuelSaveMo)+'/mo';
+  $('finNetPmt').textContent=fmt$(netEvPmt)+'/mo (after fuel savings)';
+  $('finNetPmt').style.color=netDti>dtiMax?'#ef4444':'#10b981';
+
+  $('finDti').textContent=Math.round(evDti*100)+'%';
+  $('finDti').style.color=evDti>dtiMax?'#ef4444':evDti>dtiMax*.8?'#f59e0b':'#10b981';
+  $('finIceDti').textContent=Math.round(iceDti*100)+'%';
+  $('finDtiThresh').textContent=Math.round(dtiMax*100)+'%';
+
+  const affordPass=evDti<=dtiMax;
+  const netAffordPass=netDti<=dtiMax;
+  let affordText,affordColor;
+  if(affordPass){affordText='✅ PASS — DTI '+Math.round(evDti*100)+'% within '+Math.round(dtiMax*100)+'% threshold';affordColor='#10b981';}
+  else if(netAffordPass){affordText='🟡 MARGINAL — DTI '+Math.round(evDti*100)+'% exceeds threshold, but net DTI '+Math.round(netDti*100)+'% passes after fuel savings';affordColor='#f59e0b';}
+  else{affordText='❌ FAIL — DTI '+Math.round(evDti*100)+'% exceeds '+Math.round(dtiMax*100)+'% threshold. Net DTI '+Math.round(netDti*100)+'% still too high. Needs higher down payment or longer tenure.';affordColor='#ef4444';}
+  $('finAffordVerdict').textContent=affordText;
+  $('finAffordVerdict').style.color=affordColor;
+
+  // Scores
+  let affordScore=evDti<.25?5:evDti<.35?4:evDti<.45?3:evDti<.55?2:1;
+  const totalChrg=(city.dc||0)+(city.ac||0)+(city.sw||0)*10;
+  let infraScore=totalChrg>5000?5:totalChrg>2000?4:totalChrg>500?3:totalChrg>100?2:1;
+  let collateralScore=cc.evSh>25?4:cc.evSh>15?3:cc.evSh>5?2:1;
+
+  const scores=[
+    {name:'Credit Risk',score:fin.cr,note:fin.crN,
+     grabCan:'Earnings data API for underwriting; driver rating & trip history; platform tenure data',grabImpact:1.5},
+    {name:'Collateral / Residual Value',score:collateralScore,note:fin.dispN,
+     grabCan:'Cannot provide buyback or residual guarantee. Can share fleet utilization data to help banks model depreciation.',grabImpact:0},
+    {name:'Affordability (DTI)',score:affordScore,note:'Driver income '+fmt$(monthlyIncome)+'/mo vs payment '+fmt$(evMonthly)+'/mo = DTI '+Math.round(evDti*100)+'%. Net DTI after fuel savings: '+Math.round(netDti*100)+'%.',
+     grabCan:'Preferred booking priority for EV drivers (+10-15% earnings); income floor guarantee for first 12 months',grabImpact:1},
+    {name:'Charging Infrastructure',score:infraScore,note:city.name+': '+(city.dc||0)+' DC + '+(city.ac||0)+' AC chargers'+(city.sw?' + '+city.sw+' swap stations':'')+'. Driver earning capacity depends on charger access.',
+     grabCan:'Charging infrastructure partnership; Grab-negotiated rates at partner networks; in-app charger availability',grabImpact:1},
+    {name:'Regulatory / Policy',score:fin.reg,note:fin.regN,
+     grabCan:'Cannot influence policy directly. Can provide market data to regulators; lobby for EV lending frameworks.',grabImpact:0},
+    {name:'Disposal / Repo Risk',score:Math.min(collateralScore,fin.cr),note:fin.repoN,
+     grabCan:'GPS telemetry for asset tracking; platform deactivation leverage if default; can facilitate vehicle transfer to other Grab drivers',grabImpact:0.5},
+  ];
+
+  // Render scorecard
+  let scHtml='';
+  for(const s of scores){
+    scHtml+=`<div class="factor-card" style="border-left:3px solid ${scoreColor(s.score)}"><h4 style="color:${scoreColor(s.score)};font-size:.82rem">${scoreDot(s.score)} ${s.name}: ${s.score}/5</h4>${scoreBar(s.score)}<p style="margin-top:.3rem">${s.note}</p></div>`;
+  }
+  $('finScorecard').innerHTML=scHtml;
+
+  // Overall score (weighted)
+  const weights=[.20,.25,.20,.15,.10,.10];
+  const overall=scores.reduce((sum,s,i)=>sum+s.score*weights[i],0);
+  $('finOverall').textContent=overall.toFixed(1)+'/5.0';
+  $('finOverall').style.color=scoreColor(Math.round(overall));
+
+  let verdictText,verdictColor;
+  if(overall>=4){verdictText='🟢 GO — Ready to approach banks. Strong financing fundamentals.';verdictColor='#10b981';}
+  else if(overall>=3){verdictText='🟡 PITCH WITH GRAB SUPPORT — Viable with Grab de-risking package. Lead with earnings data + preferred bookings.';verdictColor='#f59e0b';}
+  else if(overall>=2){verdictText='🟠 NEEDS SIGNIFICANT DE-RISKING — Multiple barriers. Consider pilot program (50-100 vehicles) before scale.';verdictColor='#fb923c';}
+  else{verdictText='🔴 NOT READY — Market fundamentals too weak. Wait for infrastructure + policy development.';verdictColor='#ef4444';}
+  $('finVerdict').textContent=verdictText;
+  $('finVerdict').style.color=verdictColor;
+
+  // Grab de-risking toolkit
+  const grabTools=[
+    {icon:'📊',title:'Earnings Data API',desc:'Real-time driver income verification for underwriting. Monthly/weekly earnings, trip count, active hours, platform tenure. Replaces traditional salary slips for credit assessment.',impact:'Credit Risk +1.5',available:true},
+    {icon:'⭐',title:'EV Driver Preferred Bookings',desc:'EV drivers get priority in booking queue = more stable, predictable income. Estimated +10-15% monthly earnings vs ICE drivers. Directly improves DTI ratio.',impact:'Affordability +1.0',available:true},
+    {icon:'💰',title:'Income Floor (first 12 months)',desc:'Minimum monthly earnings guarantee for qualified EV drivers during ramp-up period. If driver earns below floor, Grab tops up the difference. De-risks first-year loan payments.',impact:'Credit Risk +0.5',available:true},
+    {icon:'🔌',title:'Charging Partner Network',desc:'Grab-negotiated rates at partner charging networks. In-app charger availability + navigation. Reduces driver range anxiety and ensures earning capacity.',impact:'Infrastructure +1.0',available:true},
+    {icon:'📡',title:'GPS Telemetry & Asset Tracking',desc:'Real-time vehicle location via Grab driver app. Battery health monitoring from trip data. Enables lender to track collateral without installing separate hardware.',impact:'Disposal +0.5',available:true},
+    {icon:'⛔',title:'Platform Compliance Leverage',desc:'If driver defaults on loan, Grab can flag account and restrict booking access until resolved. Creates strong repayment incentive without aggressive repo.',impact:'Disposal +0.5',available:true},
+    {icon:'❌',title:'Residual Value Guarantee',desc:'Grab CANNOT provide buyback commitments, residual value backstops, or first-loss guarantees. These assets will not sit on Grab\'s balance sheet.',impact:'Not available',available:false},
+  ];
+  let gtHtml='';
+  for(const g of grabTools){
+    const border=g.available?'#10b98133':'#ef444433';
+    const titleColor=g.available?'#10b981':'#ef4444';
+    gtHtml+=`<div class="factor-card" style="border-color:${border}"><h4 style="color:${titleColor};font-size:.82rem">${g.icon} ${g.title} <span style="font-size:.65rem;color:var(--muted)">[${g.impact}]</span></h4><p>${g.desc}</p></div>`;
+  }
+  $('finGrabToolkit').innerHTML=gtHtml;
+
+  // After-Grab score
+  const afterGrab=scores.reduce((sum,s,i)=>sum+Math.min(5,s.score+s.grabImpact)*weights[i],0);
+  $('finAfterGrab').textContent=overall.toFixed(1)+' → '+afterGrab.toFixed(1)+'/5.0 (+'+(afterGrab-overall).toFixed(1)+' with Grab support)';
+  $('finAfterGrab').style.color=scoreColor(Math.round(afterGrab));
+
+  // Cross-city table
+  renderFinCityTable(seg,tenure,down,rate,hrs,wkDays,dtiMax);
+
+  // Pitch summary
+  renderFinPitch(cc,city,seg,ev,ice,evMonthly,iceMonthly,monthlyIncome,evDti,overall,afterGrab,scores,fuelSaveMo,tenure,down,rate);
+}
+
+function renderFinCityTable(seg,tenure,down,rate,hrs,wkDays,dtiMax){
+  const headers=['Country','City','EV Price','Monthly Pmt','Driver Income','DTI','Credit','Collateral','Afford.','Infra','Regulatory','Disposal','Overall','Verdict'];
+  let h='<table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>';
+  const weights=[.20,.25,.20,.15,.10,.10];
+
+  for(const[ck,cc] of Object.entries(C)){
+    const vd=cc.v[seg];if(!vd)continue;
+    const city=cc.cities[0],fin=FIN[ck];
+    const ev=vd.ev,ice=vd.ice;
+    const principal=ev.price*(1-down/100);
+    const mo=pmt(principal,rate/100,tenure);
+    const income=cc.hourly*hrs*wkDays;
+    const dti=mo/income;
+    const totalChrg=(city.dc||0)+(city.ac||0)+(city.sw||0)*10;
+
+    const afford=dti<.25?5:dti<.35?4:dti<.45?3:dti<.55?2:1;
+    const infra=totalChrg>5000?5:totalChrg>2000?4:totalChrg>500?3:totalChrg>100?2:1;
+    const coll=cc.evSh>25?4:cc.evSh>15?3:cc.evSh>5?2:1;
+    const disp=Math.min(coll,fin.cr);
+    const sc=[fin.cr,coll,afford,infra,fin.reg,disp];
+    const overall=sc.reduce((s,v,i)=>s+v*weights[i],0);
+
+    let verdict,vColor;
+    if(overall>=4){verdict='GO';vColor='#10b981';}
+    else if(overall>=3){verdict='PITCH';vColor='#f59e0b';}
+    else if(overall>=2){verdict='DE-RISK';vColor='#fb923c';}
+    else{verdict='NOT READY';vColor='#ef4444';}
+
+    h+=`<tr><td>${cc.flag} ${cc.name}</td><td>${city.name}</td><td>${fmt$(ev.price)}</td><td>${fmt$(mo)}</td><td>${fmt$(income)}</td>`;
+    h+=`<td style="color:${dti>dtiMax/100?'#ef4444':'#10b981'};font-weight:600">${Math.round(dti*100)}%</td>`;
+    for(const s of sc) h+=`<td style="color:${scoreColor(s)};font-weight:600">${s}</td>`;
+    h+=`<td style="font-weight:700;color:${scoreColor(Math.round(overall))}">${overall.toFixed(1)}</td>`;
+    h+=`<td style="font-weight:700;color:${vColor}">${verdict}</td></tr>`;
+  }
+  h+='</tbody></table>';
+  $('finCityTable').innerHTML=h;
+}
+
+function renderFinPitch(cc,city,seg,ev,ice,evMo,iceMo,income,dti,overall,afterGrab,scores,fuelSave,tenure,down,rate){
+  const segName={compact:'GrabCar',mpv:'Grab Premium MPV',mpv_premium:'GrabExec Premium MPV',motorbike_commuter:'GrabBike/Delivery',motorbike_premium:'GrabBike Premium'}[seg]||seg;
+
+  let topBlockers=scores.filter(s=>s.score<=3).sort((a,b)=>a.score-b.score).slice(0,3);
+  let blockerText=topBlockers.map((s,i)=>`${i+1}. ${s.name} (${s.score}/5): ${s.note}`).join('\n');
+
+  const verdictWord=overall>=4?'GO':overall>=3?'PITCH WITH GRAB SUPPORT':overall>=2?'NEEDS DE-RISKING':'NOT READY';
+
+  const pitch=`PITCH SUMMARY: EV Financing for ${segName} in ${city.name}, ${cc.name}
+${'='.repeat(65)}
+
+OPPORTUNITY
+  Active drivers in ${city.name}: 5,000+ (${segName})
+  Avg trips/day: ${seg.startsWith('motorbike')?'18':'12'} | Avg trip distance: ${seg.startsWith('motorbike')?'5':'8'}km
+  Driver monthly income: ${fmt$(income)} ($${cc.hourly.toFixed(1)}/hr)
+
+VEHICLE COMPARISON
+  EV:  ${ev.name} — ${fmt$(ev.price)}
+  ICE: ${ice.name} — ${fmt$(ice.price)}
+  EV premium: ${fmt$(ev.price-ice.price)} (${Math.round((ev.price-ice.price)/ice.price*100)}%)
+
+LOAN STRUCTURE
+  Down payment: ${Math.round(down*100)}% (${fmt$(ev.price*down)})
+  Loan principal: ${fmt$(ev.price*(1-down))}
+  Tenure: ${tenure} months at ${(rate*100).toFixed(1)}%
+  Monthly EV payment: ${fmt$(evMo)} | Monthly ICE payment: ${fmt$(iceMo)}
+  Monthly fuel savings (EV vs ICE): +${fmt$(fuelSave)}
+  Net effective EV payment: ${fmt$(evMo-fuelSave)}
+
+DRIVER AFFORDABILITY
+  DTI ratio (EV): ${Math.round(dti*100)}% | DTI ratio (ICE): ${Math.round(iceMo/income*100)}%
+  Bank threshold: ${$('finDtiMax').value}%
+  Verdict: ${dti<=+$('finDtiMax').value/100?'PASS':'EXCEEDS THRESHOLD'}
+
+TOP BARRIERS FOR LENDERS
+${blockerText}
+
+GRAB DE-RISKING PACKAGE
+  ✅ Real-time earnings data API for underwriting
+  ✅ EV driver preferred booking priority (+10-15% income)
+  ✅ Income floor guarantee (first 12 months)
+  ✅ Charging partner network access
+  ✅ GPS telemetry for asset tracking
+  ✅ Platform compliance leverage (booking restrictions on default)
+  ❌ No buyback / residual guarantee / first-loss (assets off Grab B/S)
+
+FINANCING READINESS
+  Before Grab support: ${overall.toFixed(1)}/5.0
+  After Grab support:  ${afterGrab.toFixed(1)}/5.0
+  Verdict: ${verdictWord}
+
+RECOMMENDED STRUCTURE
+  ${overall>=3?'Hire-purchase with Grab earnings verification. Consider rent-to-own for drivers below DTI threshold.':'Pilot program (50-100 vehicles) with Grab income data. Build track record before scale.'}
+`;
+  $('finPitchSummary').textContent=pitch;
+}
+
+function wireFin(){
+  finSliders.forEach(s=>{$(s.id).addEventListener('input',()=>{$(s.d).textContent=s.f($(s.id).value);renderFin();});});
+  $('finSeg').addEventListener('change',()=>{
+    const s=$('finSeg').value;
+    if(s.startsWith('motorbike')){$('finTenure').value=36;$('finDown').value=10;}
+    else if(s==='mpv_premium'){$('finTenure').value=72;$('finDown').value=20;}
+    else{$('finTenure').value=60;$('finDown').value=20;}
+    finSliders.forEach(sl=>{$(sl.d).textContent=sl.f($(sl.id).value);});
+    renderFin();
+  });
+  // Hide segments not available for country
+  const origSelC2=selC;
+}
+
 // ========== INIT ==========
-buildBar();initCh();initMktChart();wireSliders();wireMkt();selC('thailand');renderMkt();
+buildBar();initCh();initMktChart();wireSliders();wireMkt();wireFin();selC('thailand');renderMkt();renderFin();
 </script>
 </body>
 </html>
